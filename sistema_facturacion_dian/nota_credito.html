@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nota Crédito - Factura Electrónica</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fc;
+      color: #333;
+      padding: 20px;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #336699;
+    }
+
+    .seccion {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+
+    input[type="text"], input[type="number"], input[type="date"], textarea {
+      width: 100%;
+      padding: 5px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th {
+      background-color: #d9eaf7;
+    }
+
+    th, td {
+      padding: 8px;
+      text-align: center;
+    }
+
+    .total {
+      font-weight: bold;
+    }
+
+    .firmas {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 40px;
+    }
+
+    .firma {
+      width: 45%;
+      text-align: center;
+    }
+
+    .firma input {
+      border: none;
+      border-bottom: 1px solid #333;
+      width: 100%;
+      text-align: center;
+      background: transparent;
+      padding: 10px 0;
+    }
+
+    button {
+      background-color: #336699;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #265580;
+    }
+  </style>
+</head>
+<body>
+  <h1>Nota Crédito</h1>
+
+  <div class="seccion">
+    <h2>Datos del Emisor</h2>
+    <label>Empresa:</label>
+    <input type="text" >
+    <label>NIT:</label>
+    <input type="text" >
+  </div>
+
+  <div class="seccion">
+    <h2>Datos del Cliente</h2>
+    <label>Nombre/Razón Social:</label>
+    <input type="text" >
+    <label>NIT/Cédula:</label>
+    <input type="text" >
+  </div>
+
+  <div class="seccion">
+    <label>Fecha de Emisión:</label>
+    <input type="date" >
+    <label>Factura Referenciada:</label>
+    <input type="text" >
+    <label>Motivo de la Nota Crédito:</label>
+    <textarea rows="3"></textarea>
+  </div>
+
+  <div class="seccion">
+    <h2>Productos</h2>
+    <table id="productos">
+      <thead>
+        <tr>
+          <th>Ítem</th>
+          <th>Descripción</th>
+          <th>Cantidad</th>
+          <th>Valor Unitario</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><input type="text"  /></td>
+          <td><input type="number"  oninput="actualizarTotales()" /></td>
+          <td><input type="number"  oninput="actualizarTotales()" /></td>
+          <td><span class="subtotal">80000</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <button onclick="agregarProducto()">➕ Agregar Producto</button>
+  </div>
+
+  <div class="seccion">
+    <h2>Resumen</h2>
+    <p>Subtotal: $<span id="totalSubtotal">80000</span></p>
+    <p>IVA (19%): $<span id="iva">15200</span></p>
+    <p class="total">Total a Acreditar: $<span id="totalFinal">95200</span></p>
+  </div>
+
+  <div class="firmas">
+    <div class="firma">
+      <label>Firma del Emisor</label>
+      <input type="text" placeholder="Nombre y firma del emisor">
+    </div>
+    <div class="firma">
+      <label>Firma del Receptor</label>
+      <input type="text" placeholder="Nombre y firma del receptor">
+    </div>
+  </div>
+
+  <script>
+    function actualizarTotales() {
+      let tabla = document.querySelector("#productos tbody");
+      let filas = tabla.querySelectorAll("tr");
+      let total = 0;
+
+      filas.forEach((fila, index) => {
+        fila.cells[0].textContent = index + 1; // actualiza el número de ítem
+        let cantidad = parseFloat(fila.cells[2].querySelector("input").value) || 0;
+        let valor = parseFloat(fila.cells[3].querySelector("input").value) || 0;
+        let subtotal = cantidad * valor;
+        fila.cells[4].querySelector(".subtotal").textContent = subtotal.toFixed(0);
+        total += subtotal;
+      });
+
+      document.getElementById("totalSubtotal").textContent = total.toFixed(0);
+      let iva = total * 0.19;
+      document.getElementById("iva").textContent = iva.toFixed(0);
+      document.getElementById("totalFinal").textContent = (total + iva).toFixed(0);
+    }
+
+    function agregarProducto() {
+      let tabla = document.querySelector("#productos tbody");
+      let fila = document.createElement("tr");
+
+      fila.innerHTML = `
+        <td></td>
+        <td><input type="text" value="" /></td>
+        <td><input type="number" value="1" oninput="actualizarTotales()" /></td>
+        <td><input type="number" value="0" oninput="actualizarTotales()" /></td>
+        <td><span class="subtotal">0</span></td>
+      `;
+
+      tabla.appendChild(fila);
+      actualizarTotales();
+    }
+
+    actualizarTotales(); // inicial
+  </script>
+</body>
+</html>

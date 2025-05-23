@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Menú Lateral - Gestión de Facturas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="flex min-h-screen bg-gray-100">
+  <!-- Barra lateral -->
+  <aside class="w-64 bg-white shadow-lg p-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6">Menú</h2>
+    <nav class="flex flex-col space-y-4">
+      <button class="text-left px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Generar Factura</button>
+      <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Crear Cliente</button>
+      <button class="text-left px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar Cliente</button>
+      <button class="text-left px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">Buscar Cliente</button>
+      <button class="text-left px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Eliminar Cliente</button>
+      <button class="text-left px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">Consultar Facturas</button>
+      <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" onclick="notacredito()">Nota credito</button>
+      <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" >Nota debito</button>
+    </nav>
+  </aside>
+
+  <!-- Contenido principal -->
+  <div class="factura">
+    <h2>Factura Electrónica</h2>
+
+    <div class="grupo">
+      <div>
+        <label>Número de factura:</label>
+        <input type="text" id="numFactura" placeholder="Ej: FCT-005">
+      </div>
+      <div>
+        <label>Fecha:</label>
+        <input type="date" id="fechaFactura">
+      </div>
+    </div>
+
+    <div class="grupo">
+      <div>
+        <label>Empresa (Emisor):</label>
+        <input type="text" id="empresa" placeholder="Nombre de la empresa">
+      </div>
+      <div>
+        <label>NIT:</label>
+        <input type="text" id="nit" placeholder="Ej: 901234567-8">
+      </div>
+    </div>
+
+    <div class="grupo">
+      <div>
+        <label>Teléfono:</label>
+        <input type="text" id="telefono" placeholder="Ej: 3001234567">
+      </div>
+      <div>
+        <label>Email:</label>
+        <input type="email" id="email" placeholder="Ej: contacto@empresa.com">
+      </div>
+    </div>
+
+    <div class="grupo">
+      <div>
+        <label>Cliente:</label>
+        <input type="text" id="cliente" placeholder="Nombre del cliente">
+      </div>
+      <div>
+        <label>Método de pago:</label>
+        <select id="metodoPago">
+          <option>Efectivo</option>
+          <option>Transferencia</option>
+          <option>Tarjeta débito</option>
+          <option>Tarjeta crédito</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <label>Dirección:</label>
+    <input type="text" id="direccion" placeholder="Dirección del cliente">
+
+    <h4>Productos o servicios</h4>
+    <table id="tablaProductos">
+      <thead>
+        <tr>
+          <th>Descripción</th>
+          <th>Cant.</th>
+          <th>Precio</th>
+          <th>Subtotal</th>
+          <th>Eliminar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button class="btn" onclick="agregarProducto()">Agregar producto</button>
+
+    <div class="resumen">
+      <p><strong>Subtotal:</strong> $<span id="subtotal">0</span></p>
+      <p><strong>IVA (19%):</strong> $<span id="iva">0</span></p>
+      <p><strong>Total:</strong> $<span id="total">0</span></p>
+    </div>
+
+    <label>Observaciones:</label>
+    <textarea rows="3" placeholder="Comentarios adicionales..."></textarea>
+
+    <div class="qr">
+      <button class="btn" onclick="generarQR()">Generar QR</button>
+      <canvas id="codigoQR"></canvas>
+    </div>
+
+    <div class="footer">
+      Gracias por su compra.
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

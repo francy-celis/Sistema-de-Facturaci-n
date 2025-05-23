@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>login</title>
+    <link rel="stylesheet" href="estilo_login.css">
+</head>
+<body>
+    <div class="container">
+        <form class="login">
+            <h2>Iniciar Sesión</h2>
+            <samp>usar credenciales para ingresar</samp>
+            <div class="usuario">
+                <ion-icon name="person-outline"></ion-icon>
+                <input type="text" id="usuario" placeholder="usuario" required >
+            </div>
+            <div class="password">
+                <ion-icon name="lock-closed-outline"></ion-icon>
+                <input type="password" id="password" placeholder="contraseña" required >
+            </div>
+            <button class="iniciar" type="submit" >INICIAR SESIÓN</button>
+        </form>
+    </div>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+    <script src="script.js"></script>
+    
+</body>
+</html>
