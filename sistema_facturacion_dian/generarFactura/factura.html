@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Generar Factura Electrónica</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body class="bg-[#e7f0f7] min-h-screen">
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white shadow-lg p-6 block">
+      <h2 class="text-2xl font-bold text-gray-800 mb-6">Menú</h2>
+      <nav class="flex flex-col space-y-4">
+        <button class="text-left px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Generar Factura</button>
+        <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Crear Cliente</button>
+        <button class="text-left px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600">Editar Cliente</button>
+        <button class="text-left px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">Buscar Cliente</button>
+        <button class="text-left px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">Eliminar Cliente</button>
+        <button class="text-left px-4 py-2 bg-indigo-500 text-white rounded hover:bg-indigo-600">Consultar Facturas</button>
+        <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600" onclick="notacredito()">Nota crédito</button>
+        <button class="text-left px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600">Nota débito</button>
+      </nav>
+    </aside>
+    
+    <!-- Contenido Principal -->
+    <main class="flex-1 p-6">
+      <div class="factura bg-white p-6 rounded-lg shadow-md">
+        <h2 class="text-xl font-bold mb-2 text-center">Factura Electrónica de Venta</h2>
+        <div class="mx-auto h-0.5 w-64 bg-gradient-to-r from-blue-500 via-blue-300 to-blue-500 rounded-full mb-4"></div>
+        <br>
+        <!-- Datos Generales -->
+        <fieldset>
+          <legend>Datos Generales</legend>
+          <div class="grupo">
+            <div>
+              <label for="numFactura">Número de factura:</label>
+              <input type="text" id="numFactura" placeholder="Ej: FCT-005" required />
+            </div>
+            <div>
+              <label for="fechaFactura">Fecha de Emisión:</label>
+              <input type="date" id="fechaFactura" required />
+            </div>
+            <div>
+              <label for="empresa">Nombre o Razón Social:</label>
+              <input type="text" id="empresa" placeholder="Nombre o Razón Social" required />
+            </div>
+            <div>
+              <label for="nit">NIT:</label>
+              <input type="text" id="nit" placeholder="Ej: 901234567-8" required />
+            </div>
+          </div>
+        </fieldset>
+        <br>
+        <!-- Datos Cliente -->
+        <fieldset>
+          <legend>Datos del Cliente</legend>
+          <div class="grupo">
+            <div>
+              <label for="tipoIdentificacion">Tipo de Identificación:</label>
+              <select id="tipoIdentificacion" required class="border p-2 w-full rounded">
+                <option value=""> Seleccione </option>
+                <option value="11">Registro civil</option>
+                <option value="12">Tarjeta de identidad</option>
+                <option value="13">Cédula de ciudadanía</option>
+                <option value="21">Tarjeta de extranjería</option>
+                <option value="22">Cédula de extranjería</option>
+                <option value="31">NIT</option>
+                <option value="41">Pasaporte</option>
+                <option value="42">Documento extranjero</option>
+                <option value="43">Sin identificación exterior</option>
+                <option value="44">Certificado responsabilidad fiscal</option>
+                <option value="45">NUIP</option>
+              </select>
+            </div>
+            <div>
+              <label for="numeroDocumento">Número de Documento:</label>
+              <input type="text" id="numeroDocumento" placeholder="Ej: 901234567-8" required />
+            </div>
+            <div>
+              <label for="cliente">Cliente:</label>
+              <input type="text" id="cliente" placeholder="Nombre del cliente" required />
+            </div>
+            <div>
+              <label for="telefono">Teléfono:</label>
+              <input type="tel" id="telefono" placeholder="Ej: 3001234567" pattern="[0-9]{7,15}" />
+            </div>
+            <div>
+              <label for="email">Email:</label>
+              <input type="email" id="email" placeholder="Ej: contacto@empresa.com" />
+            </div>
+          </div>
+        </fieldset>
+        <br>
+
+        <!-- Método de Pago y Envío -->
+        <div>
+          <h4 class="font-bold mt-4">Pago y Envío</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label for="metodoPago">Método de pago:</label>
+              <select id="metodoPago" class="border p-2 w-full rounded">
+                <option value="">Seleccione</option>
+                <option value="1">Contado</option>
+                <option value="2">Crédito</option>
+                <option value="3">Tarjeta de crédito</option>
+                <option value="4">Tarjeta débito</option>
+                <option value="10">Transferencia</option>
+                <option value="20">Cheque</option>
+                <option value="30">Efectivo</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-2">
+              <input type="checkbox" id="requiereEnvio" onchange="toggleDireccion()" class="mt-1">
+              <label for="requiereEnvio">¿Requiere domicilio o envío?</label>
+            </div>
+
+            <div id="campoDireccion" class="col-span-2 hidden">
+              <label for="direccion">Dirección:</label>
+              <input type="text" id="direccion" placeholder="Dirección del cliente" class="border p-2 w-full rounded">
+            </div>
+          </div>
+        </div>
+        <br>
+        <!-- Productos o Servicios -->
+        <fieldset>
+          <legend>Productos o Servicios</legend>
+          <table id="tablaProductos" class="w-full mt-2 border" aria-label="Productos o servicios">
+            <thead>
+              <tr class="bg-blue-100">
+                <th class="p-2 border">Descripción</th>
+                <th class="p-2 border">Cant.</th>
+                <th class="p-2 border">Precio</th>
+                <th class="p-2 border">Subtotal</th>
+                <th class="p-2 border">Eliminar</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+          <button type="button" class="btn mt-3 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onclick="agregarProducto()">Agregar producto</button>
+        </fieldset>
+        <br>
+        <!-- Resumen -->
+        <div class="resumen mt-6">
+          <p><strong>Subtotal:</strong> $<span id="subtotal">0.00</span></p>
+          <p><strong>IVA (19%):</strong> $<span id="iva">0.00</span></p>
+          <p><strong>Total:</strong> $<span id="total">0.00</span></p>
+        </div>
+        <br>
+        <!-- Observaciones -->
+        <fieldset>
+          <legend>Observaciones</legend>
+          <textarea id="observaciones" rows="3" placeholder="Comentarios adicionales..." class="w-full border p-2 rounded"></textarea>
+        </fieldset>
+        <br>
+        <!-- Generar QR -->
+        <div class="qr mt-4">
+          <button type="button" class="btn btn-green bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded" onclick="generarQR()">Generar QR</button>
+          <canvas id="codigoQR" class="mt-4"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="scriptFactura.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</body>
+
+</html>
